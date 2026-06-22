@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "simulator:start": "scripts/start-velxio.sh",
+    "simulator:stop": "docker stop ubo-velxio",
+    "simulator:logs": "docker logs -f ubo-velxio",
+    "simulator:build": "docker build -f vendor/velxio/Dockerfile.standalone -t ubo-velxio:local vendor/velxio"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.1",

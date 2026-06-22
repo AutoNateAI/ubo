@@ -1031,6 +1031,11 @@ textarea {
   color: #74d47b;
 }
 
+.simTopbar .realSimButton {
+  color: #9ccfff;
+  border-color: #315d7d;
+}
+
 .simTopbar .addButton {
   margin-left: auto;
   background: #0b83d6;
@@ -1162,6 +1167,16 @@ textarea {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 8px;
+}
+
+.realSimLaunch {
+  margin-top: 14px;
+  width: 100%;
+  background: #0b83d6;
+  color: #ffffff;
+  border: 0;
+  font-weight: 850;
+  justify-content: center;
 }
 
 .simCodePane {

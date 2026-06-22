@@ -5,6 +5,7 @@ import {
   CircuitBoard,
   ClipboardList,
   Code2,
+  ExternalLink,
   Flag,
   Gauge,
   Home,
@@ -71,6 +72,22 @@ const starterCode = `function drive(sensor) {
     turbo: sensor.battery > 42 && clear
   };
 }`;
+
+function getVelxioEditorUrl() {
+  if (import.meta.env.VITE_VELXIO_EDITOR_URL) {
+    return import.meta.env.VITE_VELXIO_EDITOR_URL;
+  }
+
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    return "http://localhost:3080/editor";
+  }
+
+  return "https://velxio.dev/editor";
+}
+
+function openVelxioEditor() {
+  window.open(getVelxioEditorUrl(), "_blank", "noopener,noreferrer");
+}
 
 export function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -611,6 +628,9 @@ function VelxioStyleEditor({
         <button className="runButton" onClick={() => void onRecord("driving", "Ran simulator from wiring editor", { editorMode })}>
           <Play size={16} /> Run
         </button>
+        <button className="realSimButton" onClick={openVelxioEditor}>
+          <ExternalLink size={16} /> Open real simulator
+        </button>
         <button title="Stop"><span className="stopIcon" /></button>
         <button title="Reset"><RotateIcon /></button>
         <span className="simDivider" />
@@ -644,6 +664,10 @@ function VelxioStyleEditor({
               </button>
             ))}
           </div>
+          <button className="realSimLaunch" onClick={openVelxioEditor}>
+            <ExternalLink size={16} />
+            Real Velxio editor
+          </button>
         </aside>
 
         {showCode && (
