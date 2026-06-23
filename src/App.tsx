@@ -1,13 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Bot,
-  CheckCircle2,
   CircuitBoard,
   ClipboardList,
   Code2,
   ExternalLink,
   Flag,
-  Gauge,
   Home,
   KeyRound,
   LogIn,
@@ -55,15 +53,6 @@ const modules: Array<{
   { id: "race", label: "Race control", kicker: "Timed run and report", icon: Flag },
 ];
 
-const wiringChecks = [
-  ["VIN", "7.4V battery +", "Power rail", "red"],
-  ["GND", "Battery - and L298N GND", "Common reference", "black"],
-  ["GPIO 26", "L298N IN1", "Left motor forward", "yellow"],
-  ["GPIO 27", "L298N IN2", "Left motor reverse", "orange"],
-  ["GPIO 14", "L298N IN3", "Right motor forward", "blue"],
-  ["GPIO 12", "L298N IN4", "Right motor reverse", "green"],
-];
-
 const starterCode = `function drive(sensor) {
   const clear = sensor.front > 35;
   return {
@@ -74,12 +63,16 @@ const starterCode = `function drive(sensor) {
 }`;
 
 function getVelxioEditorUrl() {
+  if (import.meta.env.VITE_VELXIO_EMBED_URL) {
+    return import.meta.env.VITE_VELXIO_EMBED_URL;
+  }
+
   if (import.meta.env.VITE_VELXIO_EDITOR_URL) {
     return import.meta.env.VITE_VELXIO_EDITOR_URL;
   }
 
   if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-    return "http://localhost:3080/editor";
+    return "http://localhost:3081/editor";
   }
 
   return "https://velxio.dev/editor";
@@ -93,7 +86,6 @@ export function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [screen, setScreen] = useState<Screen>("landing");
   const [activeStep, setActiveStep] = useState<StepId>("wiring");
-  const [editorMode, setEditorMode] = useState<"code" | "both" | "circuit">("circuit");
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -107,6 +99,7 @@ export function App() {
   const [collisions, setCollisions] = useState(0);
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("Ready.");
+  const isEditorRoute = window.location.pathname.replace(/\/$/, "").endsWith("/editor");
 
   useEffect(() => onAuthStateChanged(auth, setUser), []);
 
@@ -229,6 +222,14 @@ export function App() {
     setScreen,
   };
 
+  if (isEditorRoute) {
+    return (
+      <main className={`app ${theme} editorOnlyApp`}>
+        <EmbeddedVelxioEditor fullScreen canLog={Boolean(user)} onRecord={record} />
+      </main>
+    );
+  }
+
   return (
     <main className={`app ${theme}`}>
       {screen === "landing" && (
@@ -282,8 +283,6 @@ export function App() {
           setNotes={setNotes}
           score={score}
           logs={logs}
-          editorMode={editorMode}
-          setEditorMode={setEditorMode}
           onRecord={record}
           onRunRace={runRace}
           onFinishReport={finishReport}
@@ -490,8 +489,6 @@ function LabScreen({
   setNotes,
   score,
   logs,
-  editorMode,
-  setEditorMode,
   onRecord,
   onRunRace,
   onFinishReport,
@@ -512,8 +509,6 @@ function LabScreen({
   setNotes: (value: string) => void;
   score: number;
   logs: LogEntry[];
-  editorMode: "code" | "both" | "circuit";
-  setEditorMode: (mode: "code" | "both" | "circuit") => void;
   onRecord: (kind: ActionKind, label: string, detail?: Record<string, unknown>) => Promise<void>;
   onRunRace: () => Promise<void>;
   onFinishReport: () => Promise<void>;
@@ -545,10 +540,7 @@ function LabScreen({
         <section className="labMain">
           {activeStep === "wiring" || activeStep === "kit" ? (
             <WiringLab
-              code={code}
-              setCode={setCode}
-              editorMode={editorMode}
-              setEditorMode={setEditorMode}
+              canLog={Boolean(shell.user)}
               onRecord={onRecord}
             />
           ) : activeStep === "coding" ? (
@@ -575,241 +567,54 @@ function LabScreen({
 }
 
 function WiringLab({
-  code,
-  setCode,
-  editorMode,
-  setEditorMode,
+  canLog,
   onRecord,
 }: {
-  code: string;
-  setCode: (value: string) => void;
-  editorMode: "code" | "both" | "circuit";
-  setEditorMode: (mode: "code" | "both" | "circuit") => void;
+  canLog: boolean;
   onRecord: (kind: ActionKind, label: string, detail?: Record<string, unknown>) => Promise<void>;
 }) {
   return (
-    <VelxioStyleEditor
-      code={code}
-      setCode={setCode}
-      editorMode={editorMode}
-      setEditorMode={setEditorMode}
-      onRecord={onRecord}
-    />
+    <EmbeddedVelxioEditor canLog={canLog} onRecord={onRecord} />
   );
 }
 
-function VelxioStyleEditor({
-  code,
-  setCode,
-  editorMode,
-  setEditorMode,
+function EmbeddedVelxioEditor({
+  fullScreen = false,
+  canLog,
   onRecord,
 }: {
-  code: string;
-  setCode: (value: string) => void;
-  editorMode: "code" | "both" | "circuit";
-  setEditorMode: (mode: "code" | "both" | "circuit") => void;
+  fullScreen?: boolean;
+  canLog: boolean;
   onRecord: (kind: ActionKind, label: string, detail?: Record<string, unknown>) => Promise<void>;
 }) {
-  const showCode = editorMode === "code" || editorMode === "both";
-  const showCircuit = editorMode === "circuit" || editorMode === "both";
+  const editorUrl = getVelxioEditorUrl();
+  const loggedRef = useRef(false);
+
+  useEffect(() => {
+    if (!canLog || loggedRef.current) {
+      return;
+    }
+    loggedRef.current = true;
+    void onRecord("wiring", fullScreen ? "Opened full simulator editor" : "Opened embedded wiring simulator", { editorUrl });
+  }, [canLog, editorUrl, fullScreen, onRecord]);
 
   return (
-    <section className="simEditor">
-      <header className="simTopbar">
-        <div className="simBrand"><CircuitBoard size={19} /> Robotics Lab</div>
-        <button className={editorMode === "code" ? "active" : ""} onClick={() => setEditorMode("code")}><Code2 size={16} /> Code</button>
-        <button className={editorMode === "both" ? "active" : ""} onClick={() => setEditorMode("both")}><PanelIcon /> Both</button>
-        <button className={editorMode === "circuit" ? "active" : ""} onClick={() => setEditorMode("circuit")}><CircuitBoard size={16} /> Circuit</button>
-        <span className="simDivider" />
-        <button title="Verify wiring" onClick={() => void onRecord("wiring", "Verified ESP32 motor harness", { checks: wiringChecks.length })}>
-          <CheckCircle2 size={16} /> Verify
+    <section className={fullScreen ? "embeddedEditor fullScreen" : "embeddedEditor"}>
+      <header className="embedNotice">
+        <div>
+          <strong>Wiring simulator</strong>
+          <span>Velxio source editor embedded into the UBO lab.</span>
+        </div>
+        <button onClick={openVelxioEditor}>
+          <ExternalLink size={16} /> Open full window
         </button>
-        <button className="runButton" onClick={() => void onRecord("driving", "Ran simulator from wiring editor", { editorMode })}>
-          <Play size={16} /> Run
-        </button>
-        <button className="realSimButton" onClick={openVelxioEditor}>
-          <ExternalLink size={16} /> Open real simulator
-        </button>
-        <button title="Stop"><span className="stopIcon" /></button>
-        <button title="Reset"><RotateIcon /></button>
-        <span className="simDivider" />
-        <button><Bot size={16} /> ESP32 DevKit</button>
-        <button><Radio size={16} /> Serial</button>
-        <button><Gauge size={16} /> Scope</button>
-        <button><span className="minusIcon" /> 135% <span className="plusIcon" /></button>
-        <button className="addButton">+ Add</button>
       </header>
-
-      <div className={`simBody mode-${editorMode}`}>
-        <aside className="simSidebar">
-          <div className="sideToolbar">
-            <button title="New lab">+</button>
-            <button title="Import">↑</button>
-            <button title="Save"><Save size={15} /></button>
-          </div>
-          <p>WORKSPACE</p>
-          <button className="treeItem active"><CircuitBoard size={16} /> ESP32 go-kart</button>
-          <button className="treeItem"><Code2 size={16} /> robot_brain.js</button>
-          <button className="treeItem"><Unplug size={16} /> wiring.json</button>
-          <div className="simChecklist">
-            <strong>Harness</strong>
-            {wiringChecks.map(([pin, target, reason, color]) => (
-              <button
-                key={pin}
-                onClick={() => void onRecord("wiring", `Checked ${pin} to ${target}`, { pin, target, reason })}
-              >
-                <i className={`dot ${color}`} />
-                <span>{pin}</span>
-              </button>
-            ))}
-          </div>
-          <button className="realSimLaunch" onClick={openVelxioEditor}>
-            <ExternalLink size={16} />
-            Real Velxio editor
-          </button>
-        </aside>
-
-        {showCode && (
-          <section className="simCodePane">
-            <div className="editorTab">robot_brain.js <span>×</span></div>
-            <textarea
-              className="simCodeEditor"
-              value={code}
-              spellCheck={false}
-              onChange={(event) => setCode(event.target.value)}
-              onBlur={() => void onRecord("coding", "Edited robot brain from simulator", { codeLength: code.length })}
-            />
-            <div className="outputConsole">
-              <strong>OUTPUT</strong>
-              <span>Ready: ESP32 harness mapped to L298N motor driver</span>
-              <span>Serial: waiting for run</span>
-            </div>
-          </section>
-        )}
-
-        {showCircuit && (
-          <section className="simCanvas">
-            <div className="canvasStatus">DC&nbsp;&nbsp;SPICE 8 nets&nbsp;&nbsp;0 ms</div>
-            <RealisticCircuitCanvas />
-            <div className="miniMap"><span /></div>
-          </section>
-        )}
-      </div>
+      <iframe
+        title="UBO wiring simulator"
+        src={editorUrl}
+        allow="clipboard-read; clipboard-write; serial; usb; fullscreen"
+      />
     </section>
-  );
-}
-
-function PanelIcon() {
-  return (
-    <span className="panelIcon" aria-hidden="true">
-      <i />
-      <i />
-    </span>
-  );
-}
-
-function RotateIcon() {
-  return <span className="rotateIcon" aria-hidden="true" />;
-}
-
-function RealisticCircuitCanvas() {
-  return (
-    <div className="realCircuit">
-      <svg className="circuitWires" viewBox="0 0 1320 760" aria-hidden="true">
-        <path className="velWire red" d="M422 336 H770 V214 H858" />
-        <path className="velWire black" d="M408 356 H690 V510 H1026 V314" />
-        <path className="velWire yellow" d="M410 278 H736 V270 H858" />
-        <path className="velWire orange" d="M410 300 H736 V292 H858" />
-        <path className="velWire blue" d="M410 322 H736 V314 H858" />
-        <path className="velWire green" d="M410 344 H736 V336 H858" />
-        <path className="velWire motorLeftWire" d="M1000 250 H1122 V198" />
-        <path className="velWire motorRightWire" d="M1000 344 H1122 V398" />
-      </svg>
-      <ArduinoUnoReal />
-      <L298NReal />
-      <MotorPart className="motorPartLeft" label="Motor A" />
-      <MotorPart className="motorPartRight" label="Motor B" />
-      <BatteryPart />
-      <UltrasonicPart />
-      <div className="voltageProbe">7.4V</div>
-      <div className="logicProbe">PWM 1.2 kHz</div>
-    </div>
-  );
-}
-
-function ArduinoUnoReal() {
-  const digitalPins = ["AREF", "GND", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0"];
-  const powerPins = ["RESET", "3V3", "5V", "GND", "GND", "VIN"];
-  const analogPins = ["A0", "A1", "A2", "A3", "A4", "A5"];
-
-  return (
-    <div className="arduinoReal">
-      <div className="usbJack" />
-      <div className="barrelJack" />
-      <div className="resetButton" />
-      <div className="unoLogo">UNO</div>
-      <div className="arduinoMark">ARDUINO</div>
-      <div className="mcuChip" />
-      <div className="crystal" />
-      <div className="ledOn">ON</div>
-      <div className="pinHeader digitalHeader">
-        {digitalPins.map((pin) => <span key={pin} data-pin={pin} />)}
-      </div>
-      <div className="pinHeader powerHeader">
-        {powerPins.map((pin) => <span key={pin} data-pin={pin} />)}
-      </div>
-      <div className="pinHeader analogHeader">
-        {analogPins.map((pin) => <span key={pin} data-pin={pin} />)}
-      </div>
-      <div className="pinLabels digitalLabels">{digitalPins.map((pin) => <small key={pin}>{pin}</small>)}</div>
-      <div className="pinLabels powerLabels">{powerPins.map((pin) => <small key={pin}>{pin}</small>)}</div>
-      <div className="pinLabels analogLabels">{analogPins.map((pin) => <small key={pin}>{pin}</small>)}</div>
-    </div>
-  );
-}
-
-function L298NReal() {
-  return (
-    <div className="l298nReal">
-      <div className="heatSinkReal" />
-      <div className="driverChip left" />
-      <div className="driverChip right" />
-      <div className="blueTerminal top" />
-      <div className="blueTerminal bottom" />
-      <span className="l298Label">L298N</span>
-      <div className="driverPins inputPins">{Array.from({ length: 6 }, (_, index) => <i key={index} />)}</div>
-      <div className="driverPins outputPins">{Array.from({ length: 4 }, (_, index) => <i key={index} />)}</div>
-    </div>
-  );
-}
-
-function MotorPart({ className, label }: { className: string; label: string }) {
-  return (
-    <div className={`motorReal ${className}`}>
-      <div className="motorCan" />
-      <div className="shaft" />
-      <span>{label}</span>
-    </div>
-  );
-}
-
-function BatteryPart() {
-  return (
-    <div className="batteryReal">
-      <span>7.4V Li-ion</span>
-      <strong>88%</strong>
-    </div>
-  );
-}
-
-function UltrasonicPart() {
-  return (
-    <div className="ultrasonicReal">
-      <i />
-      <i />
-      <span>HC-SR04</span>
-    </div>
   );
 }
 

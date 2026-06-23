@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "simulator:start": "scripts/start-velxio.sh",
+    "simulator:frontend": "scripts/start-velxio-frontend.sh",
     "simulator:stop": "docker stop ubo-velxio",
     "simulator:logs": "docker logs -f ubo-velxio",
     "simulator:build": "docker build -f vendor/velxio/Dockerfile.standalone -t ubo-velxio:local vendor/velxio"

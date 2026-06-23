@@ -14,6 +14,7 @@ const proOverlayPath =
   process.env.VITE_PRO_BUILD && process.env.PRO_OVERLAY_PATH
     ? path.resolve(process.env.PRO_OVERLAY_PATH)
     : path.resolve(__dirname, 'src/__pro_stub__')
+const apiProxyTarget = process.env.VELXIO_API_PROXY_TARGET || 'http://127.0.0.1:8001'
 
 export default defineConfig(({ command }) => ({
   plugins: [react()],
@@ -46,7 +47,7 @@ export default defineConfig(({ command }) => ({
   server: {
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8001',
+        target: apiProxyTarget,
         changeOrigin: true,
       },
     },

@@ -24,12 +24,17 @@ Run the real simulator locally:
 
 ```bash
 npm run simulator:start
-open http://localhost:3080/editor
+npm run simulator:frontend
 ```
 
-From the UBO lab screen, use **Open real simulator**. In local development it
-opens `http://localhost:3080/editor`; in production it uses
-`VITE_VELXIO_EDITOR_URL` when set, otherwise it falls back to `velxio.dev`.
+Then open the UBO app at `http://localhost:5173/editor` or use the Wiring lab
+screen. The portal embeds the patched Velxio source editor from
+`http://localhost:3081/editor`; that source frontend proxies simulator API calls
+to the Docker container on `http://localhost:3080`.
+
+Set `VITE_VELXIO_EMBED_URL` or `VITE_VELXIO_EDITOR_URL` to point the portal at a
+hosted simulator editor. Without either value, production falls back to
+`https://velxio.dev/editor`.
 
 Useful commands:
 

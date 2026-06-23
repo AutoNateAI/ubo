@@ -21,7 +21,6 @@ import { CompilationConsole } from '../components/editor/CompilationConsole';
 import { SimulatorCanvas } from '../components/simulator/SimulatorCanvas';
 import { SerialMonitor } from '../components/simulator/SerialMonitor';
 import { Oscilloscope } from '../components/simulator/Oscilloscope';
-import { AppHeader } from '../components/layout/AppHeader';
 import { triggerSaveAction } from '../lib/proSaveAction';
 import { GitHubStarBanner } from '../components/layout/GitHubStarBanner';
 import { useSimulatorStore, DEFAULT_BOARD_POSITION } from '../store/useSimulatorStore';
@@ -64,7 +63,7 @@ export const EditorPage: React.FC = () => {
 
   // Silent auto-save for the loaded project (only fires when authed AND
   // currentProject has a UUID — see useAutoSaveProject for the gating rules).
-  const autoSave = useAutoSaveProject();
+  useAutoSaveProject();
 
   const [editorWidthPct, setEditorWidthPct] = useState(45);
   // Desktop-only 3-way layout switch (code-only / circuit-only / both).
@@ -352,8 +351,6 @@ export const EditorPage: React.FC = () => {
 
   return (
     <div className="app">
-      <AppHeader autoSave={autoSave} />
-
       {/* ── Mobile tab bar (top, above panels) ── */}
       {isMobile && (
         <nav className="mobile-tab-bar">

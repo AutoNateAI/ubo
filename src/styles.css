@@ -991,724 +991,78 @@ textarea {
   color: #6d675d;
 }
 
-.simEditor {
-  min-height: calc(100vh - 112px);
-  border: 1px solid #0d1117;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #151719;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+.editorOnlyApp {
+  background: #101214;
+  min-height: 100vh;
 }
 
-.simTopbar {
+.embeddedEditor {
+  width: 100%;
+  min-height: min(76vh, 900px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid #c8c1b2;
+  border-radius: 8px;
+  background: #111417;
+  box-shadow: 0 20px 70px rgba(36, 29, 18, 0.18);
+}
+
+.embeddedEditor.fullScreen {
+  min-height: 100vh;
+  height: 100vh;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.embedNotice {
   min-height: 52px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  background: #1f2125;
-  border-bottom: 1px solid #2d3035;
-  color: #d8dde5;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #2c3137;
+  background: #1b2025;
+  color: #f2f5f6;
 }
 
-.simTopbar button {
-  min-height: 34px;
-  border-color: #3a3f46;
-  background: #25282d;
-  color: #cfd6df;
-  border-radius: 5px;
-  font-size: 0.88rem;
+.embedNotice div {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 
-.simTopbar button.active,
-.simTopbar button:hover {
-  background: #0e72b8;
-  border-color: #0e72b8;
-  color: white;
-}
-
-.simTopbar .runButton {
-  color: #74d47b;
-}
-
-.simTopbar .realSimButton {
-  color: #9ccfff;
-  border-color: #315d7d;
-}
-
-.simTopbar .addButton {
-  margin-left: auto;
-  background: #0b83d6;
-  border-color: #0b83d6;
-  color: white;
-  font-weight: 850;
-}
-
-.simBrand {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 10px 0 4px;
-  color: #f4f7fb;
-  font-weight: 900;
+.embedNotice strong {
   white-space: nowrap;
 }
 
-.simDivider {
-  width: 1px;
-  height: 28px;
-  background: #373b42;
-  margin: 0 4px;
+.embedNotice span {
+  color: #aeb6be;
+  font-size: 0.9rem;
 }
 
-.stopIcon {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  background: #a84949;
+.embedNotice button {
+  min-height: 36px;
+  border-color: #3b4550;
+  background: #242b32;
+  color: #f2f5f6;
+  white-space: nowrap;
 }
 
-.minusIcon::before {
-  content: "-";
-}
-
-.plusIcon::before {
-  content: "+";
-}
-
-.panelIcon {
-  width: 16px;
-  height: 14px;
-  display: inline-grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-}
-
-.panelIcon i {
-  border: 1px solid currentColor;
-}
-
-.rotateIcon {
-  width: 15px;
-  height: 15px;
-  border: 2px solid currentColor;
-  border-left-color: transparent;
-  border-radius: 50%;
-}
-
-.simBody {
-  min-height: calc(100vh - 164px);
-  display: grid;
-  grid-template-columns: 168px minmax(420px, 0.85fr) minmax(520px, 1.4fr);
-  background: #17191b;
-}
-
-.simBody.mode-code {
-  grid-template-columns: 168px minmax(0, 1fr);
-}
-
-.simBody.mode-circuit {
-  grid-template-columns: 168px minmax(0, 1fr);
-}
-
-.simSidebar {
-  background: #222426;
-  border-right: 1px solid #30333a;
-  color: #b9c0ca;
-  padding: 10px 8px;
-  display: grid;
-  align-content: start;
-  gap: 8px;
-}
-
-.simSidebar p {
-  margin: 8px 0 2px;
-  color: #8b929c;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0;
-}
-
-.sideToolbar {
-  display: flex;
-  gap: 4px;
-}
-
-.sideToolbar button,
-.treeItem,
-.simChecklist button {
-  min-height: 34px;
-  justify-content: flex-start;
-  border: 0;
-  background: transparent;
-  color: #cbd2dc;
-  border-radius: 4px;
-  padding: 0 8px;
-}
-
-.treeItem.active,
-.treeItem:hover,
-.simChecklist button:hover {
-  background: #2d4048;
-}
-
-.simChecklist {
-  margin-top: 10px;
-  display: grid;
-  gap: 3px;
-}
-
-.simChecklist strong {
-  padding: 6px 8px 2px;
-  color: #f0f3f8;
-}
-
-.simChecklist button {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px;
-}
-
-.realSimLaunch {
-  margin-top: 14px;
+.embeddedEditor iframe {
   width: 100%;
-  background: #0b83d6;
-  color: #ffffff;
-  border: 0;
-  font-weight: 850;
-  justify-content: center;
-}
-
-.simCodePane {
-  display: grid;
-  grid-template-rows: 38px minmax(0, 1fr) 150px;
-  min-width: 0;
-  border-right: 1px solid #30333a;
-  background: #1f1f1f;
-}
-
-.editorTab {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 190px;
-  padding: 0 10px;
-  background: #24272b;
-  border-right: 1px solid #34383f;
-  border-top: 2px solid #2384d1;
-  color: #e3e8ef;
-  font-size: 0.86rem;
-}
-
-.simCodeEditor {
-  min-height: 0;
   height: 100%;
-  resize: none;
-  border: 0;
-  border-radius: 0;
-  background:
-    linear-gradient(90deg, #242424 0 46px, #1f1f1f 46px),
-    #1f1f1f;
-  color: #d6dde8;
-  font-family: "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
-  font-size: 0.91rem;
-  line-height: 1.62;
-  padding: 14px 16px 14px 64px;
-}
-
-.outputConsole {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  padding: 12px;
-  background: #242424;
-  border-top: 1px solid #383b40;
-  color: #cdd3dc;
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 0.82rem;
-}
-
-.outputConsole strong {
-  color: #f0f3f8;
-}
-
-.simCanvas {
-  position: relative;
-  min-width: 0;
-  overflow: auto;
-  background:
-    linear-gradient(#24282d 1px, transparent 1px),
-    linear-gradient(90deg, #24282d 1px, transparent 1px),
-    linear-gradient(#1b1d20 1px, transparent 1px),
-    linear-gradient(90deg, #1b1d20 1px, transparent 1px),
-    #17191b;
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
-}
-
-.canvasStatus {
-  position: absolute;
-  left: 460px;
-  top: 146px;
-  z-index: 6;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  border: 1px solid #f1a900;
-  border-radius: 5px;
-  background: #090909;
-  color: #ffba22;
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 0.86rem;
-}
-
-.realCircuit {
-  position: relative;
-  min-width: 1320px;
-  min-height: 760px;
-  transform-origin: top left;
-}
-
-.circuitWires {
-  position: absolute;
-  inset: 0;
-  width: 1320px;
-  height: 760px;
-  pointer-events: none;
-  z-index: 4;
-}
-
-.velWire {
-  fill: none;
-  stroke-width: 6;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-.velWire.red { stroke: #e03030; }
-.velWire.black { stroke: #050505; }
-.velWire.yellow { stroke: #f5c135; }
-.velWire.orange { stroke: #e77728; }
-.velWire.blue { stroke: #2876d3; }
-.velWire.green { stroke: #23bf61; }
-.motorLeftWire,
-.motorRightWire {
-  stroke: #111;
-}
-
-.arduinoReal {
-  position: absolute;
-  left: 92px;
-  top: 198px;
-  width: 460px;
-  height: 316px;
-  z-index: 3;
-  border: 3px solid #0d9be7;
-  border-radius: 12px;
-  background: #2d79a7;
-  box-shadow: 0 0 0 1px rgba(111, 210, 255, 0.5), 0 22px 32px rgba(0, 0, 0, 0.35);
-}
-
-.arduinoReal::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 18px;
-  height: 22px;
-  background: repeating-linear-gradient(90deg, #d7e7ef 0 17px, transparent 17px 28px);
-  opacity: 0.9;
-}
-
-.usbJack {
-  position: absolute;
-  left: -3px;
-  top: 72px;
-  width: 92px;
-  height: 70px;
-  background: #a7a9a7;
-  border: 3px solid #c9cbc9;
-}
-
-.barrelJack {
-  position: absolute;
-  left: 10px;
-  bottom: 18px;
-  width: 92px;
-  height: 70px;
-  border-radius: 8px;
-  background: #050505;
-}
-
-.resetButton {
-  position: absolute;
-  left: 72px;
-  top: 24px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #960b0b;
-  box-shadow: 0 0 0 14px #cdd4d8;
-}
-
-.unoLogo {
-  position: absolute;
-  left: 258px;
-  top: 88px;
-  color: white;
-  font-size: 44px;
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-radius: 6px;
-  padding: 1px 16px;
-}
-
-.arduinoMark {
-  position: absolute;
-  left: 226px;
-  top: 146px;
-  color: white;
-  font-weight: 900;
-  font-size: 21px;
-}
-
-.mcuChip {
-  position: absolute;
-  left: 204px;
-  bottom: 68px;
-  width: 214px;
-  height: 58px;
-  border-radius: 5px;
-  background: #202326;
-  box-shadow:
-    0 -8px 0 -4px #d9d9d9,
-    0 8px 0 -4px #d9d9d9;
-}
-
-.mcuChip::before,
-.mcuChip::after {
-  content: "";
-  position: absolute;
-  top: 20px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #101214;
-}
-
-.mcuChip::before { left: 30px; }
-.mcuChip::after { right: 30px; }
-
-.crystal {
-  position: absolute;
-  left: 112px;
-  top: 66px;
-  width: 62px;
-  height: 38px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 7px;
-}
-
-.crystal::before,
-.crystal::after,
-.crystal {
-  border-radius: 5px;
-}
-
-.crystal::before {
-  content: "";
-  background: repeating-linear-gradient(90deg, #777 0 10px, #b9b9b9 10px 14px);
-}
-
-.ledOn {
-  position: absolute;
-  right: 54px;
-  top: 126px;
-  color: white;
-  font-size: 0.7rem;
-}
-
-.pinHeader {
-  position: absolute;
-  display: flex;
-  gap: 4px;
-  z-index: 8;
-}
-
-.pinHeader span {
-  width: 17px;
-  height: 17px;
+  min-height: 720px;
   display: block;
-  border-radius: 4px;
-  border: 2px solid #d4eff8;
-  background: #58c8dd;
-  box-shadow: inset 0 0 0 2px #24a5bf;
+  border: 0;
+  background: #111417;
 }
 
-.digitalHeader {
-  left: 132px;
-  top: 10px;
-}
-
-.powerHeader {
-  left: 202px;
-  bottom: 10px;
-}
-
-.analogHeader {
-  right: 22px;
-  bottom: 10px;
-}
-
-.pinLabels {
-  position: absolute;
-  display: flex;
-  gap: 4px;
-  color: white;
-  font-size: 0.62rem;
-  font-weight: 850;
-  z-index: 7;
-}
-
-.pinLabels small {
-  width: 17px;
-  text-align: center;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
-.digitalLabels {
-  left: 132px;
-  top: 32px;
-}
-
-.powerLabels {
-  left: 202px;
-  bottom: 32px;
-}
-
-.analogLabels {
-  right: 22px;
-  bottom: 32px;
-}
-
-.l298nReal {
-  position: absolute;
-  left: 858px;
-  top: 190px;
-  width: 184px;
-  height: 174px;
-  z-index: 3;
-  border: 2px solid #8a1414;
-  border-radius: 8px;
-  background: #c92222;
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.35);
-}
-
-.heatSinkReal {
-  position: absolute;
-  left: 54px;
-  top: 42px;
-  width: 78px;
-  height: 68px;
-  border-radius: 4px;
-  background: repeating-linear-gradient(90deg, #d1dade 0 8px, #87949a 8px 13px);
-}
-
-.driverChip {
-  position: absolute;
-  width: 52px;
-  height: 22px;
-  border-radius: 3px;
-  background: #26323a;
-}
-
-.driverChip.left { left: 20px; bottom: 28px; }
-.driverChip.right { right: 20px; top: 18px; }
-
-.blueTerminal {
-  position: absolute;
-  width: 48px;
-  height: 26px;
-  border-radius: 4px;
-  background: #235cc7;
-  border: 2px solid #153d88;
-}
-
-.blueTerminal.top { right: 16px; top: 18px; }
-.blueTerminal.bottom { left: 16px; bottom: 22px; }
-
-.l298Label {
-  position: absolute;
-  right: 12px;
-  bottom: 62px;
-  color: white;
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.driverPins {
-  position: absolute;
-  display: flex;
-  gap: 5px;
-}
-
-.driverPins i {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #d8c474;
-}
-
-.inputPins {
-  left: 18px;
-  top: -22px;
-}
-
-.outputPins {
-  right: -30px;
-  top: 74px;
-  flex-direction: column;
-}
-
-.motorReal {
-  position: absolute;
-  z-index: 3;
-  width: 160px;
-  height: 88px;
-}
-
-.motorPartLeft {
-  left: 1122px;
-  top: 144px;
-}
-
-.motorPartRight {
-  left: 1122px;
-  top: 354px;
-}
-
-.motorCan {
-  position: absolute;
-  inset: 12px 28px 12px 0;
-  border-radius: 38px 10px 10px 38px;
-  background: linear-gradient(90deg, #b78d4a, #f1d58d 45%, #a8793e);
-  border: 2px solid #78592f;
-}
-
-.shaft {
-  position: absolute;
-  right: 10px;
-  top: 34px;
-  width: 42px;
-  height: 18px;
-  border-radius: 4px;
-  background: #8b8e8b;
-}
-
-.motorReal span {
-  position: absolute;
-  left: 18px;
-  bottom: -20px;
-  color: #cbd2dc;
-  background: rgba(33, 35, 38, 0.88);
-  border-radius: 5px;
-  padding: 5px 10px;
-}
-
-.batteryReal {
-  position: absolute;
-  left: 670px;
-  top: 84px;
-  z-index: 3;
-  width: 166px;
-  height: 70px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: #222727;
-  color: #f4de69;
-  font-weight: 900;
-  box-shadow: 0 18px 26px rgba(0, 0, 0, 0.35);
-}
-
-.batteryReal strong {
-  color: #95e7a1;
-}
-
-.ultrasonicReal {
-  position: absolute;
-  left: 664px;
-  top: 560px;
-  z-index: 3;
-  width: 156px;
-  height: 78px;
-  border-radius: 8px;
-  background: #1c765e;
-  border: 2px solid #0c4e3e;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.ultrasonicReal i {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #15191a 0 28%, #8e9ca2 31% 42%, #263036 44%);
-}
-
-.ultrasonicReal span {
-  position: absolute;
-  bottom: -26px;
-  color: #cbd2dc;
-}
-
-.voltageProbe,
-.logicProbe {
-  position: absolute;
-  z-index: 6;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 5px;
-  background: #060606;
-  color: #ffbc20;
-  font-family: "SFMono-Regular", Consolas, monospace;
-  padding: 0 12px;
-}
-
-.voltageProbe {
-  left: 1010px;
-  top: 446px;
-}
-
-.logicProbe {
-  left: 598px;
-  top: 396px;
-}
-
-.miniMap {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: 118px;
-  height: 84px;
-  border: 1px solid #333941;
-  border-radius: 8px;
-  background: rgba(20, 22, 25, 0.92);
-}
-
-.miniMap span {
-  position: absolute;
-  left: 14px;
-  top: 18px;
-  width: 20px;
-  height: 12px;
-  border-radius: 3px;
-  border: 1px solid #e15a5a;
-  background: #5f2020;
+.embeddedEditor.fullScreen iframe {
+  min-height: 0;
 }
 
 @media (max-width: 1180px) {
@@ -1720,20 +1074,6 @@ textarea {
   .raceGrid,
   .labShell {
     grid-template-columns: 1fr;
-  }
-
-  .simBody,
-  .simBody.mode-code,
-  .simBody.mode-circuit {
-    grid-template-columns: 1fr;
-  }
-
-  .simSidebar {
-    display: none;
-  }
-
-  .simCodePane {
-    min-height: 460px;
   }
 
   .landingBand,
@@ -1813,12 +1153,14 @@ textarea {
       "dot reason";
   }
 
-  .simTopbar {
-    overflow-x: auto;
+  .embedNotice {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
-  .realCircuit {
-    transform: scale(0.72);
-    min-height: 560px;
+  .embedNotice div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
   }
 }
