@@ -1,0 +1,16 @@
+.git
+.github
+.npm-cache
+dist
+functions/node_modules
+node_modules
+test-results
+vendor/velxio/.git
+vendor/velxio/.vite
+vendor/velxio/build
+vendor/velxio/dist
+vendor/velxio/frontend/dist
+vendor/velxio/frontend/node_modules
+vendor/velxio/backend/.venv
+vendor/velxio/backend/__pycache__
+vendor/velxio/**/__pycache__

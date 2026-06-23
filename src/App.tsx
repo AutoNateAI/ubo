@@ -75,7 +75,7 @@ function getVelxioEditorUrl() {
     return "http://localhost:3081/editor";
   }
 
-  return "https://velxio.dev/editor";
+  return "https://ubo-velxio-editor-650162209338.us-central1.run.app/editor";
 }
 
 function openVelxioEditor() {

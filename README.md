@@ -33,8 +33,9 @@ screen. The portal embeds the patched Velxio source editor from
 to the Docker container on `http://localhost:3080`.
 
 Set `VITE_VELXIO_EMBED_URL` or `VITE_VELXIO_EDITOR_URL` to point the portal at a
-hosted simulator editor. Without either value, production falls back to
-`https://velxio.dev/editor`.
+hosted simulator editor. Without either value, production falls back to the
+patched Cloud Run editor at
+`https://ubo-velxio-editor-650162209338.us-central1.run.app/editor`.
 
 Useful commands:
 
