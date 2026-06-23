@@ -36,6 +36,7 @@ jobs:
           cp dist/index.html dist/editor/index.html
         env:
           GITHUB_PAGES: "true"
+          VITE_BASE_PATH: "/"
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
