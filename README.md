@@ -54,3 +54,11 @@ npm run deploy
 ```
 
 The function namespace is `uboApi`; Firestore data is stored under `ubo/...`.
+
+## Learning Content
+
+Tutorials live under `tutorials/`. Start with
+[`tutorials/001-wire-code-drive`](tutorials/001-wire-code-drive/README.md) for
+the first car wiring, firmware, and simulation practice flow.
+
+Video lesson workflow notes live in [`docs/learning-video-workflow.md`](docs/learning-video-workflow.md).
