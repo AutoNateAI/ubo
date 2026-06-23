@@ -588,6 +588,7 @@ function EmbeddedVelxioEditor({
   onRecord: (kind: ActionKind, label: string, detail?: Record<string, unknown>) => Promise<void>;
 }) {
   const editorUrl = getVelxioEditorUrl();
+  const frameBlockedFallback = editorUrl.includes("velxio.dev");
   const loggedRef = useRef(false);
 
   useEffect(() => {
@@ -609,11 +610,25 @@ function EmbeddedVelxioEditor({
           <ExternalLink size={16} /> Open full window
         </button>
       </header>
-      <iframe
-        title="UBO wiring simulator"
-        src={editorUrl}
-        allow="clipboard-read; clipboard-write; serial; usb; fullscreen"
-      />
+      {frameBlockedFallback ? (
+        <div className="embedBlocked">
+          <CircuitBoard size={42} />
+          <h2>Hosted simulator needed</h2>
+          <p>
+            The public Velxio editor blocks embedding. Configure `VITE_VELXIO_EMBED_URL`
+            with the patched hosted editor to run it inside this portal.
+          </p>
+          <button className="primary" onClick={openVelxioEditor}>
+            <ExternalLink size={16} /> Open Velxio
+          </button>
+        </div>
+      ) : (
+        <iframe
+          title="UBO wiring simulator"
+          src={editorUrl}
+          allow="clipboard-read; clipboard-write; serial; usb; fullscreen"
+        />
+      )}
     </section>
   );
 }
