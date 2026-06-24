@@ -1,8 +1,8 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-06-24T02:53:38.569Z",
-  "name": "UBO Car Drive Practice",
+  "exportedAt": "2026-06-24T02:53:38.571Z",
+  "name": "UBO Car Drive - Power And Ground",
   "boards": [
     {
       "id": "arduino-uno",
@@ -55,114 +55,6 @@
     }
   ],
   "wires": [
-    {
-      "id": "w-left-pwm",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "5",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "EN1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#facc15",
-      "signalType": "digital"
-    },
-    {
-      "id": "w-left-fwd",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "8",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "IN1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#22c55e",
-      "signalType": "digital"
-    },
-    {
-      "id": "w-left-rev",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "7",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "IN2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#ef4444",
-      "signalType": "digital"
-    },
-    {
-      "id": "w-right-pwm",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "6",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "EN2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#fde047",
-      "signalType": "digital"
-    },
-    {
-      "id": "w-right-fwd",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "12",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "IN3",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#16a34a",
-      "signalType": "digital"
-    },
-    {
-      "id": "w-right-rev",
-      "start": {
-        "componentId": "arduino-uno",
-        "pinName": "11",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "u1",
-        "pinName": "IN4",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#f97316",
-      "signalType": "digital"
-    },
     {
       "id": "w-vcc1",
       "start": {
@@ -234,78 +126,6 @@
       "waypoints": [],
       "color": "#000000",
       "signalType": "ground"
-    },
-    {
-      "id": "w-left-out1",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT1",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "left_motor_load",
-        "pinName": "1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-left-out2",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT2",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "left_motor_load",
-        "pinName": "2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-right-out3",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT3",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "right_motor_load",
-        "pinName": "1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-right-out4",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT4",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "right_motor_load",
-        "pinName": "2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
     }
   ],
   "activeBoardId": "arduino-uno"

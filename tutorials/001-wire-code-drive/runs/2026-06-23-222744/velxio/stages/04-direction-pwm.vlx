@@ -1,8 +1,8 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-06-24T02:53:38.569Z",
-  "name": "UBO Car Drive Practice",
+  "exportedAt": "2026-06-24T02:53:38.571Z",
+  "name": "UBO Car Drive - Direction And PWM",
   "boards": [
     {
       "id": "arduino-uno",
@@ -234,78 +234,6 @@
       "waypoints": [],
       "color": "#000000",
       "signalType": "ground"
-    },
-    {
-      "id": "w-left-out1",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT1",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "left_motor_load",
-        "pinName": "1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-left-out2",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT2",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "left_motor_load",
-        "pinName": "2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-right-out3",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT3",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "right_motor_load",
-        "pinName": "1",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
-    },
-    {
-      "id": "w-right-out4",
-      "start": {
-        "componentId": "u1",
-        "pinName": "OUT4",
-        "x": 0,
-        "y": 0
-      },
-      "end": {
-        "componentId": "right_motor_load",
-        "pinName": "2",
-        "x": 0,
-        "y": 0
-      },
-      "waypoints": [],
-      "color": "#111827",
-      "signalType": "analog"
     }
   ],
   "activeBoardId": "arduino-uno"

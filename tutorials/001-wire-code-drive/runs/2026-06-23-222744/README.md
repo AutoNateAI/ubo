@@ -18,8 +18,9 @@ https://ubo.autonateai.com/editor/
 | `firmware/robot_car_drive.ino` | Firmware to paste into the editor |
 | `velxio/ubo-car-drive.vlx` | Velxio project export for the wired circuit |
 | `velxio/diagram.json` | Wokwi-style diagram reference |
-| `frames/tutorial-frames.html` | Screenshot source frames |
-| `screenshots/*.png` | Captured visual tutorial frames |
+| `velxio/stages/*.vlx` | Stage-by-stage project imports used for screenshots |
+| `capture-actual-app.mjs` | Playwright script that drives the live app and captures screenshots |
+| `screenshots/*.png` | Screenshots captured from the actual app/editor |
 
 ## Hardware Map For This Run
 

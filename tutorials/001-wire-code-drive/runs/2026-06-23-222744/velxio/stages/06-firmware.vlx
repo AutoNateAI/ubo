@@ -1,8 +1,8 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-06-24T02:53:38.569Z",
-  "name": "UBO Car Drive Practice",
+  "exportedAt": "2026-06-24T02:53:38.571Z",
+  "name": "UBO Car Drive - Firmware",
   "boards": [
     {
       "id": "arduino-uno",

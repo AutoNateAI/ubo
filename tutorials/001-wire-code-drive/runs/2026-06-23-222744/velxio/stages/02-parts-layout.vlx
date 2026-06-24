@@ -1,0 +1,59 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-06-24T02:53:38.570Z",
+  "name": "UBO Car Drive - Parts Layout",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "name": "UBO Car Controller",
+      "boardKind": "arduino-uno",
+      "x": 90,
+      "y": 210,
+      "running": false,
+      "compiledProgram": null,
+      "serialOutput": "",
+      "serialBaudRate": 115200,
+      "serialMonitorOpen": true,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino"
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "const int LEFT_PWM = 5;\nconst int LEFT_FWD = 8;\nconst int LEFT_REV = 7;\n\nconst int RIGHT_PWM = 6;\nconst int RIGHT_FWD = 12;\nconst int RIGHT_REV = 11;\n\nvoid setup() {\n  Serial.begin(115200);\n\n  pinMode(LEFT_PWM, OUTPUT);\n  pinMode(LEFT_FWD, OUTPUT);\n  pinMode(LEFT_REV, OUTPUT);\n  pinMode(RIGHT_PWM, OUTPUT);\n  pinMode(RIGHT_FWD, OUTPUT);\n  pinMode(RIGHT_REV, OUTPUT);\n\n  stopRobot();\n  Serial.println(\"UBO car firmware ready\");\n}\n\nvoid loop() {\n  driveForward(180);\n  delay(1500);\n\n  pivotRight(165);\n  delay(900);\n\n  pivotLeft(165);\n  delay(900);\n\n  driveBackward(150);\n  delay(1200);\n\n  stopRobot();\n  delay(1200);\n}\n\nvoid driveForward(int speed) {\n  setLeftMotor(true, speed);\n  setRightMotor(true, speed);\n  logState(\"forward\", speed, speed);\n}\n\nvoid driveBackward(int speed) {\n  setLeftMotor(false, speed);\n  setRightMotor(false, speed);\n  logState(\"reverse\", speed, speed);\n}\n\nvoid pivotRight(int speed) {\n  setLeftMotor(true, speed);\n  setRightMotor(false, speed);\n  logState(\"pivot-right\", speed, speed);\n}\n\nvoid pivotLeft(int speed) {\n  setLeftMotor(false, speed);\n  setRightMotor(true, speed);\n  logState(\"pivot-left\", speed, speed);\n}\n\nvoid stopRobot() {\n  digitalWrite(LEFT_FWD, LOW);\n  digitalWrite(LEFT_REV, LOW);\n  digitalWrite(RIGHT_FWD, LOW);\n  digitalWrite(RIGHT_REV, LOW);\n  analogWrite(LEFT_PWM, 0);\n  analogWrite(RIGHT_PWM, 0);\n  logState(\"stop\", 0, 0);\n}\n\nvoid setLeftMotor(bool forward, int speed) {\n  digitalWrite(LEFT_FWD, forward ? HIGH : LOW);\n  digitalWrite(LEFT_REV, forward ? LOW : HIGH);\n  analogWrite(LEFT_PWM, clampSpeed(speed));\n}\n\nvoid setRightMotor(bool forward, int speed) {\n  digitalWrite(RIGHT_FWD, forward ? HIGH : LOW);\n  digitalWrite(RIGHT_REV, forward ? LOW : HIGH);\n  analogWrite(RIGHT_PWM, clampSpeed(speed));\n}\n\nint clampSpeed(int speed) {\n  return constrain(speed, 0, 255);\n}\n\nvoid logState(const char* state, int leftSpeed, int rightSpeed) {\n  Serial.print(\"state=\");\n  Serial.print(state);\n  Serial.print(\" left=\");\n  Serial.print(leftSpeed);\n  Serial.print(\" right=\");\n  Serial.println(rightSpeed);\n}\n"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "u1",
+      "metadataId": "motor-driver-l293d",
+      "x": 450,
+      "y": 190,
+      "properties": {}
+    },
+    {
+      "id": "left_motor_load",
+      "metadataId": "resistor",
+      "x": 700,
+      "y": 160,
+      "properties": {
+        "value": "5"
+      }
+    },
+    {
+      "id": "right_motor_load",
+      "metadataId": "resistor",
+      "x": 700,
+      "y": 310,
+      "properties": {
+        "value": "5"
+      }
+    }
+  ],
+  "wires": [],
+  "activeBoardId": "arduino-uno"
+}
