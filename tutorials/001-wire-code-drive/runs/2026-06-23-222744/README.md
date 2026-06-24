@@ -4,6 +4,12 @@ Captured: 2026-06-23 22:27 America/Detroit
 
 This run is the simulator-ready version of the first robot car practice. It uses the UBO editor's Wokwi-style visual components and the real Velxio L293D motor-driver model so the wiring names match what you see in the canvas.
 
+Start here:
+
+```text
+follow-along.md
+```
+
 Open the editor:
 
 ```text
