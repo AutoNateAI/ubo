@@ -1,8 +1,8 @@
 # Follow Along: Wire, Code, And Drive
 
-This walkthrough is meant to feel like a short lab blog post. Read a section, look at the screenshot, then perform that exact move in the simulator before going on.
+The fastest way to understand robot motion is to build the signal chain yourself. In this lab, you will wire a controller to a motor driver, add firmware that behaves like real robot code, run the circuit in the simulator, and connect those motor states to the driving screen.
 
-The screenshots were captured from the actual UBO app with Playwright. They are not mockups. They show the real portal, the embedded editor, the staged circuit, the firmware view, and the driving screen.
+Move slowly. Each checkpoint builds on the last one. By the end, `forward`, `reverse`, `pivot`, and `stop` will no longer feel like game commands. They will feel like electrical states you can inspect.
 
 ## The Goal
 
