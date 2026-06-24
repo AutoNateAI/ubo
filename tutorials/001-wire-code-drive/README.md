@@ -11,6 +11,16 @@ Build the first full robotics loop:
 
 The point is not just “make motors spin.” The point is to see how a physical signal becomes a simulated action: a pin goes high, the motor driver receives it, the motor direction changes, and the car logic updates.
 
+## Captured Tutorial Run
+
+Use this simulator-ready walkthrough first:
+
+```text
+runs/2026-06-23-222744/
+```
+
+It includes the exact L293D wiring map, paste-ready Arduino firmware, a Velxio project export, Wokwi-style diagram data, a timestamped run log, and screenshots for each step.
+
 ## What You Are Practicing
 
 - Common ground and battery power

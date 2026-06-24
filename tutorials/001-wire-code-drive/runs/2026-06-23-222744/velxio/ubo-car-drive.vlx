@@ -1,0 +1,172 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "exportedAt": "2026-06-23T22:27:44-04:00",
+  "name": "UBO Car Drive Practice",
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "name": "UBO Car Controller",
+      "boardKind": "arduino-uno",
+      "x": 90,
+      "y": 210,
+      "running": false,
+      "compiledProgram": null,
+      "serialOutput": "",
+      "serialBaudRate": 115200,
+      "serialMonitorOpen": true,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino"
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "const int LEFT_PWM = 5;\\nconst int LEFT_FWD = 8;\\nconst int LEFT_REV = 7;\\n\\nconst int RIGHT_PWM = 6;\\nconst int RIGHT_FWD = 12;\\nconst int RIGHT_REV = 11;\\n\\nvoid setup() {\\n  Serial.begin(115200);\\n\\n  pinMode(LEFT_PWM, OUTPUT);\\n  pinMode(LEFT_FWD, OUTPUT);\\n  pinMode(LEFT_REV, OUTPUT);\\n  pinMode(RIGHT_PWM, OUTPUT);\\n  pinMode(RIGHT_FWD, OUTPUT);\\n  pinMode(RIGHT_REV, OUTPUT);\\n\\n  stopRobot();\\n  Serial.println(\"UBO car firmware ready\");\\n}\\n\\nvoid loop() {\\n  driveForward(180);\\n  delay(1500);\\n\\n  pivotRight(165);\\n  delay(900);\\n\\n  pivotLeft(165);\\n  delay(900);\\n\\n  driveBackward(150);\\n  delay(1200);\\n\\n  stopRobot();\\n  delay(1200);\\n}\\n\\nvoid driveForward(int speed) {\\n  setLeftMotor(true, speed);\\n  setRightMotor(true, speed);\\n  logState(\"forward\", speed, speed);\\n}\\n\\nvoid driveBackward(int speed) {\\n  setLeftMotor(false, speed);\\n  setRightMotor(false, speed);\\n  logState(\"reverse\", speed, speed);\\n}\\n\\nvoid pivotRight(int speed) {\\n  setLeftMotor(true, speed);\\n  setRightMotor(false, speed);\\n  logState(\"pivot-right\", speed, speed);\\n}\\n\\nvoid pivotLeft(int speed) {\\n  setLeftMotor(false, speed);\\n  setRightMotor(true, speed);\\n  logState(\"pivot-left\", speed, speed);\\n}\\n\\nvoid stopRobot() {\\n  digitalWrite(LEFT_FWD, LOW);\\n  digitalWrite(LEFT_REV, LOW);\\n  digitalWrite(RIGHT_FWD, LOW);\\n  digitalWrite(RIGHT_REV, LOW);\\n  analogWrite(LEFT_PWM, 0);\\n  analogWrite(RIGHT_PWM, 0);\\n  logState(\"stop\", 0, 0);\\n}\\n\\nvoid setLeftMotor(bool forward, int speed) {\\n  digitalWrite(LEFT_FWD, forward ? HIGH : LOW);\\n  digitalWrite(LEFT_REV, forward ? LOW : HIGH);\\n  analogWrite(LEFT_PWM, clampSpeed(speed));\\n}\\n\\nvoid setRightMotor(bool forward, int speed) {\\n  digitalWrite(RIGHT_FWD, forward ? HIGH : LOW);\\n  digitalWrite(RIGHT_REV, forward ? LOW : HIGH);\\n  analogWrite(RIGHT_PWM, clampSpeed(speed));\\n}\\n\\nint clampSpeed(int speed) {\\n  return constrain(speed, 0, 255);\\n}\\n\\nvoid logState(const char* state, int leftSpeed, int rightSpeed) {\\n  Serial.print(\"state=\");\\n  Serial.print(state);\\n  Serial.print(\" left=\");\\n  Serial.print(leftSpeed);\\n  Serial.print(\" right=\");\\n  Serial.println(rightSpeed);\\n}\\n"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "u1",
+      "metadataId": "motor-driver-l293d",
+      "x": 450,
+      "y": 190,
+      "properties": {}
+    },
+    {
+      "id": "left_motor_load",
+      "metadataId": "resistor",
+      "x": 700,
+      "y": 160,
+      "properties": {
+        "value": "5"
+      }
+    },
+    {
+      "id": "right_motor_load",
+      "metadataId": "resistor",
+      "x": 700,
+      "y": 310,
+      "properties": {
+        "value": "5"
+      }
+    }
+  ],
+  "wires": [
+    {
+      "id": "w-left-pwm",
+      "start": { "componentId": "arduino-uno", "pinName": "5", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "EN1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#facc15",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-left-fwd",
+      "start": { "componentId": "arduino-uno", "pinName": "8", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "IN1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#22c55e",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-left-rev",
+      "start": { "componentId": "arduino-uno", "pinName": "7", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "IN2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#ef4444",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-right-pwm",
+      "start": { "componentId": "arduino-uno", "pinName": "6", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "EN2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#fde047",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-right-fwd",
+      "start": { "componentId": "arduino-uno", "pinName": "12", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "IN3", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#16a34a",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-right-rev",
+      "start": { "componentId": "arduino-uno", "pinName": "11", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "IN4", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#f97316",
+      "signalType": "digital"
+    },
+    {
+      "id": "w-vcc1",
+      "start": { "componentId": "arduino-uno", "pinName": "5V", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "VCC1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#ef4444",
+      "signalType": "power"
+    },
+    {
+      "id": "w-vcc2",
+      "start": { "componentId": "arduino-uno", "pinName": "5V", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "VCC2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#dc2626",
+      "signalType": "power"
+    },
+    {
+      "id": "w-gnd1",
+      "start": { "componentId": "arduino-uno", "pinName": "GND", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "GND.1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#111827",
+      "signalType": "ground"
+    },
+    {
+      "id": "w-gnd2",
+      "start": { "componentId": "arduino-uno", "pinName": "GND", "x": 0, "y": 0 },
+      "end": { "componentId": "u1", "pinName": "GND.2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#000000",
+      "signalType": "ground"
+    },
+    {
+      "id": "w-left-out1",
+      "start": { "componentId": "u1", "pinName": "OUT1", "x": 0, "y": 0 },
+      "end": { "componentId": "left_motor_load", "pinName": "1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#111827",
+      "signalType": "analog"
+    },
+    {
+      "id": "w-left-out2",
+      "start": { "componentId": "u1", "pinName": "OUT2", "x": 0, "y": 0 },
+      "end": { "componentId": "left_motor_load", "pinName": "2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#111827",
+      "signalType": "analog"
+    },
+    {
+      "id": "w-right-out3",
+      "start": { "componentId": "u1", "pinName": "OUT3", "x": 0, "y": 0 },
+      "end": { "componentId": "right_motor_load", "pinName": "1", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#111827",
+      "signalType": "analog"
+    },
+    {
+      "id": "w-right-out4",
+      "start": { "componentId": "u1", "pinName": "OUT4", "x": 0, "y": 0 },
+      "end": { "componentId": "right_motor_load", "pinName": "2", "x": 0, "y": 0 },
+      "waypoints": [],
+      "color": "#111827",
+      "signalType": "analog"
+    }
+  ],
+  "activeBoardId": "arduino-uno"
+}

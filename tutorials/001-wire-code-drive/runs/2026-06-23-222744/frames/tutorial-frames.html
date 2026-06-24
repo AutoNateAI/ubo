@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UBO Car Drive Tutorial Frames</title>
+  <style>
+    :root {
+      --paper: #f7f4ec;
+      --ink: #1f2428;
+      --muted: #667085;
+      --panel: #ffffff;
+      --grid: #e6dfd2;
+      --dark: #121619;
+      --blue: #1689c9;
+      --cyan: #66d9ef;
+      --red: #ef4444;
+      --green: #22c55e;
+      --yellow: #facc15;
+      --orange: #f97316;
+      --black: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .frame {
+      width: 1280px;
+      height: 720px;
+      padding: 34px;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 26px;
+      background:
+        linear-gradient(90deg, rgba(31,36,40,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(31,36,40,0.04) 1px, transparent 1px),
+        var(--paper);
+      background-size: 48px 48px;
+    }
+
+    .notes {
+      border: 1px solid #dad2c5;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.86);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 10px 32px rgba(31,36,40,0.08);
+    }
+
+    .eyebrow {
+      color: #587137;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    p,
+    li {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    ul {
+      margin: 18px 0 0;
+      padding-left: 20px;
+    }
+
+    .caption {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+      border-top: 1px solid #e2dbcf;
+      padding-top: 16px;
+    }
+
+    .canvas {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        var(--dark);
+      background-size: 44px 44px;
+      border: 1px solid #2b3137;
+      box-shadow: 0 18px 42px rgba(31,36,40,0.2);
+    }
+
+    .toolbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: #20252b;
+      border-bottom: 1px solid #353c45;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      color: #d6dde6;
+      font-weight: 800;
+    }
+
+    .tool {
+      border: 1px solid #3a414b;
+      background: #252b32;
+      color: #cbd5e1;
+      border-radius: 5px;
+      height: 32px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+    }
+
+    .tool.active {
+      background: #0f7fbd;
+      border-color: #229fe4;
+      color: #fff;
+    }
+
+    .tool.run {
+      color: #86efac;
+    }
+
+    .board {
+      position: absolute;
+      left: 120px;
+      top: 230px;
+      width: 305px;
+      height: 220px;
+      border: 3px solid #28aeea;
+      border-radius: 9px;
+      background: #2f87bd;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.22);
+    }
+
+    .board::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 60px;
+      width: 88px;
+      height: 62px;
+      background: #c7c9c7;
+      border: 3px solid #999;
+    }
+
+    .board::after {
+      content: "UNO";
+      position: absolute;
+      left: 139px;
+      top: 62px;
+      color: #fff;
+      font-size: 38px;
+      border: 3px solid rgba(255,255,255,0.55);
+      border-radius: 7px;
+      padding: 2px 16px;
+    }
+
+    .chip {
+      position: absolute;
+      left: 118px;
+      bottom: 48px;
+      width: 145px;
+      height: 48px;
+      background: #1d2329;
+      border-radius: 4px;
+      border: 2px solid #111;
+    }
+
+    .pin-row {
+      position: absolute;
+      display: flex;
+      gap: 7px;
+    }
+
+    .pin {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+      background: #8ee7f4;
+      border: 2px solid #d5fbff;
+    }
+
+    .pins-top {
+      top: 20px;
+      right: 18px;
+    }
+
+    .pins-bottom {
+      bottom: 16px;
+      right: 20px;
+    }
+
+    .driver {
+      position: absolute;
+      left: 525px;
+      top: 248px;
+      width: 160px;
+      height: 112px;
+      border-radius: 7px;
+      background: #d61f1f;
+      color: white;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+    }
+
+    .driver::before {
+      content: "";
+      position: absolute;
+      left: 52px;
+      top: 33px;
+      width: 57px;
+      height: 46px;
+      background: repeating-linear-gradient(90deg, #e5eef1, #e5eef1 8px, #aeb9bf 8px, #aeb9bf 13px);
+      border-radius: 3px;
+    }
+
+    .driver::after {
+      content: "L293D";
+      position: absolute;
+      left: 76px;
+      top: 58px;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .motor {
+      position: absolute;
+      width: 120px;
+      height: 58px;
+      border-radius: 8px;
+      background: #1b8a68;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+    }
+
+    .motor.left {
+      left: 760px;
+      top: 205px;
+    }
+
+    .motor.right {
+      left: 760px;
+      top: 374px;
+    }
+
+    .wire {
+      position: absolute;
+      height: 5px;
+      border-radius: 4px;
+      transform-origin: left center;
+      background: var(--green);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.24);
+    }
+
+    .wire.red { background: var(--red); }
+    .wire.black { background: var(--black); }
+    .wire.yellow { background: var(--yellow); }
+    .wire.orange { background: var(--orange); }
+    .wire.blue { background: #2f80ed; }
+
+    .label {
+      position: absolute;
+      background: rgba(0,0,0,0.74);
+      color: #facc15;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font: 700 15px ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: nowrap;
+    }
+
+    .callout {
+      position: absolute;
+      padding: 12px 14px;
+      border-radius: 7px;
+      background: rgba(248,250,252,0.94);
+      color: #1f2937;
+      border: 1px solid #dbe2ea;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .code {
+      position: absolute;
+      left: 70px;
+      top: 78px;
+      right: 70px;
+      bottom: 46px;
+      border-radius: 8px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #dbeafe;
+      padding: 24px;
+      font: 18px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow: hidden;
+      white-space: pre-wrap;
+    }
+
+    .checklist {
+      position: absolute;
+      left: 90px;
+      top: 105px;
+      width: 740px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .check {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid #dbe2ea;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-size: 20px;
+      font-weight: 850;
+      color: #1f2937;
+    }
+
+    .keygrid {
+      position: absolute;
+      left: 175px;
+      top: 132px;
+      display: grid;
+      grid-template-columns: repeat(3, 110px);
+      grid-template-rows: repeat(3, 86px);
+      gap: 16px;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .key {
+      width: 102px;
+      height: 76px;
+      border-radius: 8px;
+      border: 2px solid #cfd8e3;
+      background: #f8fafc;
+      color: #1f2937;
+      font-size: 32px;
+      font-weight: 950;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 0 #cbd5e1;
+    }
+
+    .space {
+      grid-column: 1 / 4;
+      width: 334px;
+      font-size: 24px;
+    }
+
+    .state-card {
+      position: absolute;
+      right: 90px;
+      top: 138px;
+      width: 350px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #dbe2ea;
+      padding: 22px;
+      color: #1f2937;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.2);
+    }
+
+    .state-card code {
+      display: block;
+      margin-top: 16px;
+      font: 17px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+      white-space: pre-wrap;
+      color: #0f172a;
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <section class="frame" id="open-editor">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 1</div>
+        <h1>Open the UBO wiring editor</h1>
+        <p>Start from the simulator page so the lesson happens inside the same portal you will use for the game.</p>
+      </div>
+      <div class="caption">Check: editor toolbar, canvas, Run button, board selector.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar">
+        <strong>UBO Robotics Lab</strong>
+        <span class="tool">Code</span>
+        <span class="tool active">Circuit</span>
+        <span class="tool">Verify</span>
+        <span class="tool run">Run</span>
+        <span class="tool">Arduino Uno</span>
+        <span class="tool">Serial</span>
+      </div>
+      <div class="board">
+        <div class="chip"></div>
+        <div class="pin-row pins-top"><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span></div>
+        <div class="pin-row pins-bottom"><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span></div>
+      </div>
+      <div class="callout" style="left:475px;top:134px;">Canvas ready for real visual parts</div>
+    </main>
+  </section>
+
+  <section class="frame" id="parts-layout">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 2</div>
+        <h1>Place parts in signal order</h1>
+        <p>Controller on the left, L293D in the middle, motor loads on the right. This matches real bench wiring.</p>
+      </div>
+      <div class="caption">Check: Uno, L293D, left motor load, right motor load.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Parts layout</strong><span class="tool active">Circuit</span><span class="tool">+ Add</span></div>
+      <div class="board"><div class="chip"></div><div class="pin-row pins-top"><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span></div><div class="pin-row pins-bottom"><span class="pin"></span><span class="pin"></span><span class="pin"></span><span class="pin"></span></div></div>
+      <div class="driver"></div>
+      <div class="motor left">Left motor</div>
+      <div class="motor right">Right motor</div>
+      <div class="label" style="left:170px;top:470px;">controller</div>
+      <div class="label" style="left:555px;top:376px;">dual H-bridge</div>
+      <div class="label" style="left:775px;top:455px;">loads stand in for motors</div>
+    </main>
+  </section>
+
+  <section class="frame" id="power-ground">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 3</div>
+        <h1>Wire power and common ground</h1>
+        <p>The driver needs logic power, motor power, and shared ground before direction pins mean anything.</p>
+      </div>
+      <div class="caption">Wire: 5V -> VCC1/VCC2, GND -> GND.1/GND.2.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Power and ground</strong><span class="tool active">Circuit</span><span class="tool run">Run later</span></div>
+      <div class="board"><div class="chip"></div></div>
+      <div class="driver"></div>
+      <div class="motor left">Left motor</div>
+      <div class="motor right">Right motor</div>
+      <div class="wire red" style="left:392px;top:392px;width:178px;transform:rotate(-42deg);"></div>
+      <div class="wire red" style="left:392px;top:406px;width:218px;transform:rotate(-24deg);"></div>
+      <div class="wire black" style="left:392px;top:424px;width:205px;transform:rotate(-10deg);"></div>
+      <div class="wire black" style="left:392px;top:438px;width:228px;transform:rotate(4deg);"></div>
+      <div class="label" style="left:430px;top:132px;">5V feeds VCC1 and VCC2</div>
+      <div class="label" style="left:456px;top:472px;">GND is shared</div>
+    </main>
+  </section>
+
+  <section class="frame" id="direction-pwm">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 4</div>
+        <h1>Wire direction and PWM</h1>
+        <p>Direction pins choose forward/reverse. PWM pins control speed.</p>
+      </div>
+      <div class="caption">D5 EN1, D8 IN1, D7 IN2, D6 EN2, D12 IN3, D11 IN4.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Direction and PWM</strong><span class="tool active">Circuit</span></div>
+      <div class="board"><div class="chip"></div></div>
+      <div class="driver"></div>
+      <div class="wire yellow" style="left:390px;top:262px;width:145px;transform:rotate(0deg);"></div>
+      <div class="wire green" style="left:390px;top:276px;width:144px;transform:rotate(6deg);"></div>
+      <div class="wire red" style="left:390px;top:290px;width:145px;transform:rotate(13deg);"></div>
+      <div class="wire yellow" style="left:392px;top:318px;width:150px;transform:rotate(11deg);"></div>
+      <div class="wire green" style="left:392px;top:332px;width:158px;transform:rotate(17deg);"></div>
+      <div class="wire orange" style="left:392px;top:346px;width:166px;transform:rotate(23deg);"></div>
+      <div class="label" style="left:442px;top:202px;">speed: D5/D6</div>
+      <div class="label" style="left:456px;top:414px;">direction: D8/D7 and D12/D11</div>
+    </main>
+  </section>
+
+  <section class="frame" id="motor-outputs">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 5</div>
+        <h1>Wire motor outputs</h1>
+        <p>Motors connect to the driver outputs, not directly to the controller.</p>
+      </div>
+      <div class="caption">OUT1/OUT2 -> left load. OUT3/OUT4 -> right load.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Motor outputs</strong><span class="tool active">Circuit</span></div>
+      <div class="board"><div class="chip"></div></div>
+      <div class="driver"></div>
+      <div class="motor left">Left motor</div>
+      <div class="motor right">Right motor</div>
+      <div class="wire black" style="left:680px;top:278px;width:96px;transform:rotate(-24deg);"></div>
+      <div class="wire black" style="left:680px;top:302px;width:97px;transform:rotate(-7deg);"></div>
+      <div class="wire black" style="left:680px;top:328px;width:116px;transform:rotate(38deg);"></div>
+      <div class="wire black" style="left:680px;top:350px;width:110px;transform:rotate(52deg);"></div>
+      <div class="label" style="left:690px;top:128px;">driver owns motor current</div>
+    </main>
+  </section>
+
+  <section class="frame" id="firmware">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 6</div>
+        <h1>Paste firmware</h1>
+        <p>The code turns pin states into robot behaviors: forward, reverse, pivot, stop.</p>
+      </div>
+      <div class="caption">Check serial output before trusting movement.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>robot_car_drive.ino</strong><span class="tool active">Code</span><span class="tool run">Run</span></div>
+      <pre class="code">void driveForward(int speed) {
+  setLeftMotor(true, speed);
+  setRightMotor(true, speed);
+  logState("forward", speed, speed);
+}
+
+void pivotRight(int speed) {
+  setLeftMotor(true, speed);
+  setRightMotor(false, speed);
+  logState("pivot-right", speed, speed);
+}
+
+void stopRobot() {
+  digitalWrite(LEFT_FWD, LOW);
+  digitalWrite(LEFT_REV, LOW);
+  digitalWrite(RIGHT_FWD, LOW);
+  digitalWrite(RIGHT_REV, LOW);
+  analogWrite(LEFT_PWM, 0);
+  analogWrite(RIGHT_PWM, 0);
+}</pre>
+    </main>
+  </section>
+
+  <section class="frame" id="run-checklist">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 7</div>
+        <h1>Run and verify</h1>
+        <p>Do not just press Run. Compare serial logs to the motor-driver state.</p>
+      </div>
+      <div class="caption">Pass only when code, pins, and behavior agree.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Run checklist</strong><span class="tool active">Serial</span><span class="tool run">Running</span></div>
+      <div class="checklist">
+        <div class="check">1. Serial says forward; both sides drive forward.</div>
+        <div class="check">2. Serial says pivot-right; left forward and right reverse.</div>
+        <div class="check">3. Serial says pivot-left; left reverse and right forward.</div>
+        <div class="check">4. Serial says reverse; both sides reverse.</div>
+        <div class="check">5. Serial says stop; PWM is zero and direction pins are LOW.</div>
+      </div>
+    </main>
+  </section>
+
+  <section class="frame" id="game-controls">
+    <aside class="notes">
+      <div>
+        <div class="eyebrow">Step 8</div>
+        <h1>Map it to game controls</h1>
+        <p>The game should consume robot state created by firmware-style motor commands.</p>
+      </div>
+      <div class="caption">W/A/S/D/Space become motor-state commands.</div>
+    </aside>
+    <main class="canvas">
+      <div class="toolbar"><strong>Game control bridge</strong><span class="tool active">Driving</span></div>
+      <div class="keygrid">
+        <div></div><div class="key">W</div><div></div>
+        <div class="key">A</div><div class="key">S</div><div class="key">D</div>
+        <div class="key space">Space</div>
+      </div>
+      <div class="state-card">
+        <strong>Example state from D</strong>
+        <code>{
+  leftMotor: "forward",
+  rightMotor: "reverse",
+  leftSpeed: 165,
+  rightSpeed: 165,
+  action: "pivot-right"
+}</code>
+      </div>
+    </main>
+  </section>
+  <script>
+    const frames = Array.from(document.querySelectorAll('.frame'));
+    function showHashFrame() {
+      const id = window.location.hash.slice(1);
+      if (!id) return;
+      frames.forEach((frame) => {
+        frame.style.display = frame.id === id ? 'grid' : 'none';
+      });
+    }
+    showHashFrame();
+    window.addEventListener('hashchange', showHashFrame);
+  </script>
+</body>
+</html>
