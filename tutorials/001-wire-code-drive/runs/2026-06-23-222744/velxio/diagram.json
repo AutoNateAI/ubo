@@ -3,10 +3,10 @@
   "author": "UBO Robotics",
   "editor": "ubo-velxio",
   "parts": [
-    { "type": "wokwi-arduino-uno", "id": "arduino-uno", "top": 210, "left": 90, "attrs": {} },
-    { "type": "velxio-motor-driver-l293d", "id": "u1", "top": 190, "left": 450, "attrs": {} },
-    { "type": "wokwi-resistor", "id": "left_motor_load", "top": 160, "left": 700, "attrs": { "value": "5" } },
-    { "type": "wokwi-resistor", "id": "right_motor_load", "top": 310, "left": 700, "attrs": { "value": "5" } }
+    { "type": "wokwi-arduino-uno", "id": "arduino-uno", "top": 120, "left": 70, "attrs": {} },
+    { "type": "velxio-motor-driver-l293d", "id": "u1", "top": 130, "left": 420, "attrs": {} },
+    { "type": "wokwi-resistor", "id": "left_motor_load", "top": 75, "left": 640, "attrs": { "value": "5", "label": "Left motor load" } },
+    { "type": "wokwi-resistor", "id": "right_motor_load", "top": 285, "left": 640, "attrs": { "value": "5", "label": "Right motor load" } }
   ],
   "connections": [
     [ "arduino-uno:5", "u1:EN1", "gold", [] ],
@@ -19,9 +19,9 @@
     [ "arduino-uno:5V", "u1:VCC2", "red", [] ],
     [ "arduino-uno:GND", "u1:GND.1", "black", [] ],
     [ "arduino-uno:GND", "u1:GND.2", "black", [] ],
-    [ "u1:OUT1", "left_motor_load:1", "black", [] ],
-    [ "u1:OUT2", "left_motor_load:2", "black", [] ],
-    [ "u1:OUT3", "right_motor_load:1", "black", [] ],
-    [ "u1:OUT4", "right_motor_load:2", "black", [] ]
+    [ "u1:OUT1", "left_motor_load:1", "white", [] ],
+    [ "u1:OUT2", "left_motor_load:2", "gray", [] ],
+    [ "u1:OUT3", "right_motor_load:1", "white", [] ],
+    [ "u1:OUT4", "right_motor_load:2", "gray", [] ]
   ]
 }

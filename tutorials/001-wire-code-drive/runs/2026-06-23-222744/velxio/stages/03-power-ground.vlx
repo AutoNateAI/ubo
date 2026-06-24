@@ -1,15 +1,15 @@
 {
   "format": "velxio-project",
   "version": 1,
-  "exportedAt": "2026-06-24T02:53:38.571Z",
+  "exportedAt": "2026-06-24T03:03:43.530Z",
   "name": "UBO Car Drive - Power And Ground",
   "boards": [
     {
       "id": "arduino-uno",
       "name": "UBO Car Controller",
       "boardKind": "arduino-uno",
-      "x": 90,
-      "y": 210,
+      "x": 70,
+      "y": 120,
       "running": false,
       "compiledProgram": null,
       "serialOutput": "",
@@ -31,15 +31,15 @@
     {
       "id": "u1",
       "metadataId": "motor-driver-l293d",
-      "x": 450,
-      "y": 190,
+      "x": 420,
+      "y": 130,
       "properties": {}
     },
     {
       "id": "left_motor_load",
       "metadataId": "resistor",
-      "x": 700,
-      "y": 160,
+      "x": 640,
+      "y": 75,
       "properties": {
         "value": "5"
       }
@@ -47,8 +47,8 @@
     {
       "id": "right_motor_load",
       "metadataId": "resistor",
-      "x": 700,
-      "y": 310,
+      "x": 640,
+      "y": 285,
       "properties": {
         "value": "5"
       }
@@ -106,7 +106,7 @@
         "y": 0
       },
       "waypoints": [],
-      "color": "#111827",
+      "color": "#e5e7eb",
       "signalType": "ground"
     },
     {

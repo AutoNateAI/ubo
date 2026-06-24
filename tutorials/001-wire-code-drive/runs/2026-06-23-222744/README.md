@@ -15,6 +15,7 @@ https://ubo.autonateai.com/editor/
 | File | Purpose |
 | --- | --- |
 | `run-log.md` | Timestamped walkthrough notes and expected checks |
+| `follow-along.md` | Step-by-step learner path for wiring, coding, and test drive |
 | `firmware/robot_car_drive.ino` | Firmware to paste into the editor |
 | `velxio/ubo-car-drive.vlx` | Velxio project export for the wired circuit |
 | `velxio/diagram.json` | Wokwi-style diagram reference |
